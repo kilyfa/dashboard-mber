@@ -171,7 +171,7 @@ with data_tab:
             "deskripsi": "Deskripsi",
         }
     )
-    renamed["Link"] = renamed["Link"].apply(lambda x: f'<a href="{x}" target="_blank">🔗 Kunjungi</a>')
+    renamed["Link"] = renamed["Link"].apply(lambda x: f'<a href="{x}" target="_blank">Link</a>')
 
     # --- Style ---
     st.markdown(
