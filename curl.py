@@ -195,24 +195,43 @@ with data_tab:
 """,
         unsafe_allow_html=True,
     )
-
+    # --- Pagination (di bawah, kanan) ---------------------------------
     items_pp = 10
     total_pages = max(1, math.ceil(len(renamed) / items_pp))
 
-    page = st.slider(
-        "Geser Halaman",
-        min_value=1,
-        max_value=total_pages,
-        value=st.session_state.get("page", 1),
-        step=1,
-        format="%d",
-        key="page_slider"
-    )
+    # Pastikan page tersimpan; reset ke 1 jika filter berubah
+    if "page" not in st.session_state:
+        st.session_state.page = 1
 
+    # Clamp page agar tidak melebihi total_pages
+    if st.session_state.page > total_pages:
+        st.session_state.page = total_pages
+    elif st.session_state.page < 1:
+        st.session_state.page = 1
+
+    page = st.session_state.page
     start, end = (page - 1) * items_pp, page * items_pp
 
+    # TAMPILKAN TABEL DI SINI
     table_html = renamed.iloc[start:end].to_html(classes="custom-table", escape=False, index=False)
     st.markdown(f'<div class="table-container">{table_html}</div>', unsafe_allow_html=True)
+
+    # ---------- Bar navigasi di bawah kanan ----------
+    # buat 3 kolom: area kosong (lebar 70%), info+prev (15%), next (15%)
+    gap, info_prev, next_col = st.columns([2, 0.15, 0.15])
+
+    with info_prev:
+        if st.button("⬅️ Prev", disabled=(page == 1)):
+            st.session_state.page -= 1
+    
+    info_prev.markdown(
+        f"<div style='display:flex;justify-content:flex-end;align-items:center;width:100%;font-size:15px;white-space:nowrap; padding-left: 180px;'>Halaman {page} dari {total_pages} ({len(renamed)} total data)</div>",
+        unsafe_allow_html=True
+    )
+    
+    with next_col:
+        if st.button("Next ➡️", disabled=(page == total_pages)):
+            st.session_state.page += 1
 
     st.download_button(
         "⬇️ Download CSV (hasil filter)",
