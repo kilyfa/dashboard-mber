@@ -95,7 +95,7 @@ with st.sidebar:
         st.success("API key tersimpan.")
     with st.expander("Cara Mendapatkan OpenRouter API Key"):
         st.markdown("""
-        Untuk menggunakan fitur CV Analyzer dengan model DeepSeek, kamu perlu **OpenRouter API Key**.
+        Untuk menggunakan fitur CV Analyzer, kamu perlu **OpenRouter API Key**.
 
         **Langkah-langkah:**
 
