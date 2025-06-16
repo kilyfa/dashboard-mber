@@ -90,10 +90,10 @@ df["Link"] = df["slug"].apply(lambda s: f"https://simbelmawa.kemdikbud.go.id/mag
 with st.sidebar:
     st.title("⚙️ Pengaturan")
 
-    api_key = st.text_input("🔑 OpenRouter API Key", type="password")
+    api_key = st.text_input("🔑 OpenRouter API Key (For AI)", type="password")
     if api_key:
         st.success("API key tersimpan.")
-    with st.expander("🔐 Cara Mendapatkan OpenRouter API Key"):
+    with st.expander("Cara Mendapatkan OpenRouter API Key"):
         st.markdown("""
         Untuk menggunakan fitur CV Analyzer dengan model DeepSeek, kamu perlu **OpenRouter API Key**.
 
