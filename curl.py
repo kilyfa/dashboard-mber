@@ -416,4 +416,4 @@ with cv_tab:
         st.markdown("### 📋 Hasil Evaluasi")
         st.markdown(evaluation.replace("\n", "  \n"))
 
-st.caption("© 2025 Dashboard Lowongan MBKM – dengan Generative CV Analyzer ATS")
+st.caption("© 2025 Dashboard Lowongan Magang Berdampak (MBER)")
