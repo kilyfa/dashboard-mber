@@ -198,7 +198,17 @@ with data_tab:
 
     items_pp = 10
     total_pages = max(1, math.ceil(len(renamed) / items_pp))
-    page = st.number_input("Halaman", 1, total_pages, 1, 1, format="%d")
+
+    page = st.slider(
+        "Geser Halaman",
+        min_value=1,
+        max_value=total_pages,
+        value=st.session_state.get("page", 1),
+        step=1,
+        format="%d",
+        key="page_slider"
+    )
+
     start, end = (page - 1) * items_pp, page * items_pp
 
     table_html = renamed.iloc[start:end].to_html(classes="custom-table", escape=False, index=False)
