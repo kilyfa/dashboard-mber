@@ -93,6 +93,21 @@ with st.sidebar:
     api_key = st.text_input("🔑 OpenRouter API Key", type="password")
     if api_key:
         st.success("API key tersimpan.")
+    with st.expander("🔐 Cara Mendapatkan OpenRouter API Key"):
+        st.markdown("""
+        Untuk menggunakan fitur CV Analyzer dengan model DeepSeek, kamu perlu **OpenRouter API Key**.
+
+        **Langkah-langkah:**
+
+        1. Buka [https://openrouter.ai](https://openrouter.ai)
+        2. Login atau buat akun (bisa pakai Google).
+        3. Klik foto profil → **API Keys**
+        4. Tekan tombol **Create Key** → salin kunci yang muncul.
+        5. Tempelkan ke kolom **API Key** di sidebar aplikasi ini.
+
+        🔒 Key ini disimpan hanya di sesi browser kamu dan tidak dikirim ke mana-mana kecuali saat menghubungi OpenRouter API.
+
+        """, unsafe_allow_html=True)
 
     st.divider()
     st.header("🛠️ Filter Lowongan")
