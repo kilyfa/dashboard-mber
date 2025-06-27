@@ -4,7 +4,7 @@
 
 import os, json, math, pathlib, re, requests, textwrap, itertools, hashlib
 from typing import List, Tuple
-
+import calendar
 import pandas as pd
 import numpy as np
 import streamlit as st
@@ -166,6 +166,52 @@ col4.metric("Mitra Unik", filtered["mitra"].nunique())
 data_tab, viz_tab, cv_tab = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer"])
 
 with data_tab:
+    folder_path = pathlib.Path("data_lowongan")
+    date_fmt = "%d-%m-%Y"
+    latest_date = None
+
+    for file in folder_path.glob("data-*.json"):
+        m = re.match(r"data-(\d{2})-(\d{2})-(\d{4})\.json", file.name)
+        if m:
+            d = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+            try:
+                dt = pd.to_datetime(d, format=date_fmt)
+                if latest_date is None or dt > latest_date:
+                    latest_date = dt
+            except Exception:
+                pass
+
+    if latest_date:
+        day = latest_date.day
+        month = calendar.month_name[latest_date.month]
+        year = latest_date.year
+        formatted = f"{day} {month} {year}"
+
+        st.markdown(f"""
+        <div style="
+            padding: 0.8rem 1rem;
+            background: rgba(30, 144, 255, 0.1);
+            border-left: 4px solid #1e90ff;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #ddd;
+        ">
+            📅 <strong>Terakhir update pada tanggal:</strong> {formatted}
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div style="
+            padding: 0.8rem 1rem;
+            background: rgba(255, 193, 7, 0.08);
+            border-left: 4px solid #ffc107;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #eee;
+        ">
+            ⚠️ <strong>Data belum tersedia.</strong> Silakan klik tombol update terlebih dahulu.
+        </div>
+        """, unsafe_allow_html=True)
     show_cols = ["posisi_magang", "mitra", "provinsi", "kota", "jumlah", "deskripsi", "Link"]
     renamed = filtered[show_cols].rename(
         columns={
