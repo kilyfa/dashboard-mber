@@ -38,12 +38,18 @@ def fetch_whitelist(path: pathlib.Path = WL_PATH) -> set[str]:
     return {l.strip() for l in lines if l.strip() and not l.startswith("#")}
 
 @st.cache_data(show_spinner=False)
-def load_lowongan(path: str = LOWONGAN_PATH) -> pd.DataFrame:
-    with open(path, "r", encoding="utf-8") as f:
-        raw = json.load(f)
-    return pd.DataFrame(raw["props"]["data"]["data"])
+def load_lowongan(folder: str = "data_lowongan") -> pd.DataFrame:
+    dfs = []
+    folder_path = pathlib.Path(folder)
+    for file in folder_path.glob("*.json"):
+        with open(file, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        if "props" in raw and "data" in raw["props"] and "data" in raw["props"]["data"]:
+            dfs.append(pd.DataFrame(raw["props"]["data"]["data"]))
+    if dfs:
+        return pd.concat(dfs, ignore_index=True)
+    return pd.DataFrame()
 
-VALID_WILAYAH = fetch_whitelist()
 df = load_lowongan()
 
 STOPWORDS = {"pusat", "timur", "barat", "utara", "selatan"}
