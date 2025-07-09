@@ -435,7 +435,7 @@ with cv_tab:
 
 with intern_recom:
     st.subheader("📊 Pencarian Berdasarkan Posisi")
-
+    st.warning("Fitur ini masih dalam tahap pengembangan. Hasil mungkin tidak akurat dan tidak sesuai harapan.")
     posisi = st.text_input("Ingin magang posisi apa?", placeholder="mis. Data Analyst, Marketing, dll")
     
     def count_keyword_matches(text, keywords):
