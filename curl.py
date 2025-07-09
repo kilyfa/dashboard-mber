@@ -163,7 +163,7 @@ col2.metric("Hasil Filter", len(filtered))
 col3.metric("Total Divisi", int(filtered["jumlah"].sum()))
 col4.metric("Mitra Unik", filtered["mitra"].nunique())
 
-data_tab, viz_tab, cv_tab = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer"])
+data_tab, viz_tab, cv_tab, intern_recom = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
 
 with data_tab:
     folder_path = pathlib.Path("data_lowongan")
@@ -389,9 +389,9 @@ with cv_tab:
 
     def short_hash(text: str) -> str:
         return hashlib.md5(text.encode()).hexdigest()[:6]
-
+    with open("folder_prompt/cv_analyzer.txt", "r", encoding="utf-8") as f:
+        prompt_cv = f.read()
     if analyze:
-        # --- Retrieve selected lowongan row ---
         m = re.search(r"slug:(.*?)\)$", selected_label)
         if not m:
             st.error("Slug lowongan tidak ditemukan."); st.stop()
@@ -407,68 +407,10 @@ with cv_tab:
 
         posisi_title = low_row["posisi_magang"].split()[0]
         basic_def = wiki_summary(posisi_title) or "Definisi tidak ditemukan."
-
         prompt = textwrap.dedent(f"""
         ### INSTRUKSI
         Anda berperan sebagai *ATS Career Coach* profesional. Evaluasilah kecocokan kandidat
-        untuk lowongan berikut dan berikan panduan pengembangan karier yang terstruktur.
-
-        #### Prosedur Analisis
-        1. **Ekstraksi Skill Kunci**  
-           • Dari DESKRIPSI LOWONGAN + DEFINISI POSISI, kumpulkan 6-10 skill/kompetensi krusial.
-
-        2. **Pencocokan Skill di CV**  
-           • Tandai ✔️ jika skill (atau sinonimnya) muncul di CV, ❌ jika tidak.  
-           • Sertakan kutipan bukti ≤ 12 kata untuk setiap ✔️.
-
-        3. **Kekuatan & Kekurangan**  
-           • Berdasarkan skill‐match, pendidikan, pengalaman & organisasi, uraikan:  
-             - *KEKUATAN* utama kandidat (≥ 2 poin).  
-             - *KEKURANGAN* utama kandidat yang berpotensi menghambat (≥ 2 poin).
-
-        4. **Penilaian Pengetahuan & Kapasitas**  
-           • Kategorikan CV sebagai **Spesialis / Generalis / Mixed**.  
-           • Jelaskan dampaknya terhadap kesiapan menghadapi tanggung jawab posisi.
-
-        5. **Skor Kecocokan & Probabilitas**  
-           • Berikan **Skor Kecocokan** 0-100.  
-           • Estimasikan **Probabilitas Dipanggil** (%), rasionalkan singkat.
-
-        6. **Roadmap Peningkatan 7-14-21 Hari**  
-           • Buat tahapan aksi konkrit (Belajar kursus X, proyek portofolio Y, kontribusi komunitas Z).  
-           • Fokus pada menutup *KEKURANGAN* dan menaikkan probabilitas.
-
-        #### FORMAT KELUARAN (WAJIB, tanpa tambahan lain)
-        ---
-        Ringkasan  
-        <3-4 kalimat ringkasan evaluasi>
-
-        Skor Kecocokan: <angka>  
-        Probabilitas Dipanggil: <angka>%  
-
-        Skill  
-        | Skill | Ada | Bukti |  
-        |-------|-----|-------|  
-        | Skill 1 | ✔️/❌ | ... |  
-        ...
-
-        Kekuatan  
-        - ...
-
-        Kekurangan  
-        - ...
-
-        Pengetahuan/Kapasitas: <Spesialis/Generalis/Mixed> – <alasan singkat>
-
-        Pengalaman Organisasi: Ada / Tidak ada  
-        <detail singkat>
-
-        Roadmap 7-14-21 HARI  
-        **7 Hari**: …  
-        **14 Hari**: …  
-        **21 Hari**: …  
-        ---
-
+        untuk lowongan berikut dan berikan panduan pengembangan karier yang terstruktur.""" + prompt_cv + f"""
         ### Deskripsi Lowongan
         Posisi : {low_row['posisi_magang']}
         Mitra  : {low_row['mitra']}
@@ -490,5 +432,72 @@ with cv_tab:
 
         st.markdown("### 📋 Hasil Evaluasi")
         st.markdown(evaluation.replace("\n", "  \n"))
+
+with intern_recom:
+    st.subheader("📊 Pencarian Berdasarkan Posisi")
+
+    posisi = st.text_input("Ingin magang posisi apa?", placeholder="mis. Data Analyst, Marketing, dll")
+    
+    def count_keyword_matches(text, keywords):
+        return sum(kw.lower() in text.lower() for kw in keywords)
+
+    if posisi:
+        with st.spinner("🔍 Mencari magang dengan kata kunci yang relevan..."):
+            prompt_keywords = f"""
+            Kamu adalah asisten karier yang membantu dalam pencarian magang. Tugasmu adalah memberikan 5 - 10 kata kunci spesifik (dalam bahasa Indonesia) yang paling relevan untuk posisi magang dengan posisi: "{posisi}"
+
+            Langkah-langkah:
+            1. Pahami maksud dari posisi tersebut: apakah ini sebuah jabatan spesifik atau bidang umum.
+            2. Jika "{posisi}" merupakan jabatan spesifik, sertakan posisinya sebagai salah satu kata kunci.
+            3. Jika itu bidang umum, fokus pada keterampilan atau tools yang relevan.
+            4. Hindari kata umum seperti "magang", "kerja", "digital", atau nama bidang generik seperti "TI", "bisnis".
+            5. Fokus pada tools, keterampilan, platform, metode, atau istilah teknis yang relevan.
+
+            **Hasilkan hanya daftar kata kunci, tanpa penjelasan tambahan.**
+            """
+            try:
+                keywords_resp = generate_evaluation(prompt_keywords, model_name, api_key)
+                # Pisahkan berdasarkan koma atau baris baru, lalu bersihkan spasi
+                keywords = [k.strip() for k in re.split(r"[,\n]+", keywords_resp) if k.strip()]
+            except Exception as e:
+                st.error(f"❌ Gagal mendapatkan kata kunci dari AI: {e}")
+                keywords = []
+            
+        if keywords:
+            st.markdown(f"**Kata kunci hasil AI:** `{', '.join(keywords)}`")
+
+            pattern = "|".join(map(re.escape, keywords))
+            mask = (
+                filtered["deskripsi"].str.contains(pattern, case=False, na=False) |
+                filtered["posisi_magang"].str.contains(pattern, case=False, na=False)
+            )
+            hasil_rekom = filtered[mask].copy()
+
+            hasil_rekom["relevansi"] = (
+                hasil_rekom["deskripsi"].fillna("").apply(lambda x: count_keyword_matches(x, keywords)) +
+                hasil_rekom["posisi_magang"].fillna("").apply(lambda x: count_keyword_matches(x, keywords))
+            )
+            hasil_rekom = hasil_rekom.sort_values(by="relevansi", ascending=False)
+            hasil_rekom = hasil_rekom.head(20).copy()
+
+            if hasil_rekom.empty:
+                st.info("🔎 Tidak ditemukan lowongan magang yang cocok dengan kata kunci tersebut.")
+            else:
+                st.markdown("### ✅ Rekomendasi Lowongan Magang:")
+                show_cols = ["posisi_magang", "mitra", "provinsi", "kota", "jumlah", "deskripsi", "Link"]
+                renamed = hasil_rekom[show_cols].rename(columns={
+                    "posisi_magang": "Posisi",
+                    "mitra": "Mitra",
+                    "provinsi": "Provinsi",
+                    "kota": "Kota/Kab",
+                    "jumlah": "Divisi",
+                    "deskripsi": "Deskripsi"
+                })
+                renamed["Link"] = renamed["Link"].apply(lambda x: f'<a href="{x}" target="_blank">Link</a>')
+                table_html = renamed.to_html(classes="custom-table", escape=False, index=False)
+                st.markdown(f'<div class="table-container">{table_html}</div>', unsafe_allow_html=True)
+        else:
+            st.warning("⚠️ Tidak ada kata kunci yang berhasil dihasilkan.")
+
 
 st.caption("© 2025 Dashboard Lowongan Magang Berdampak (MBER)")

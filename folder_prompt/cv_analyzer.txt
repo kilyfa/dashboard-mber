@@ -1,0 +1,55 @@
+#### Prosedur Analisis
+1. **Ekstraksi Skill Kunci**  
+    • Dari DESKRIPSI LOWONGAN + DEFINISI POSISI, kumpulkan 6-10 skill/kompetensi krusial.
+
+2. **Pencocokan Skill di CV**  
+    • Tandai ✔️ jika skill (atau sinonimnya) muncul di CV, ❌ jika tidak.  
+    • Sertakan kutipan bukti ≤ 12 kata untuk setiap ✔️.
+
+3. **Kekuatan & Kekurangan**  
+    • Berdasarkan skill‐match, pendidikan, pengalaman & organisasi, uraikan:  
+        - *KEKUATAN* utama kandidat (≥ 2 poin).  
+        - *KEKURANGAN* utama kandidat yang berpotensi menghambat (≥ 2 poin).
+
+4. **Penilaian Pengetahuan & Kapasitas**  
+    • Kategorikan CV sebagai **Spesialis / Generalis / Mixed**.  
+    • Jelaskan dampaknya terhadap kesiapan menghadapi tanggung jawab posisi.
+
+5. **Skor Kecocokan & Probabilitas**  
+    • Berikan **Skor Kecocokan** 0-100.  
+    • Estimasikan **Probabilitas Dipanggil** (%), rasionalkan singkat.
+
+6. **Roadmap Peningkatan 7-14-21 Hari**  
+    • Buat tahapan aksi konkrit (Belajar kursus X, proyek portofolio Y, kontribusi komunitas Z).  
+    • Fokus pada menutup *KEKURANGAN* dan menaikkan probabilitas.
+
+#### FORMAT KELUARAN (WAJIB, tanpa tambahan lain)
+---
+Ringkasan  
+<3-4 kalimat ringkasan evaluasi>
+
+Skor Kecocokan: <angka>  
+Probabilitas Dipanggil: <angka>%  
+
+Skill  
+| Skill | Ada | Bukti |  
+|-------|-----|-------|  
+| Skill 1 | ✔️/❌ | ... |  
+...
+
+Kekuatan  
+- ...
+
+Kekurangan  
+- ...
+
+Pengetahuan/Kapasitas: <Spesialis/Generalis/Mixed> – <alasan singkat>
+
+Pengalaman Organisasi: Ada / Tidak ada  
+<detail singkat>
+
+Roadmap 7-14-21 HARI  
+**7 Hari**: …  
+**14 Hari**: …  
+**21 Hari**: …  
+---
