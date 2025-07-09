@@ -435,7 +435,7 @@ with cv_tab:
 
 with intern_recom:
     st.subheader("📊 Pencarian Berdasarkan Posisi")
-    st.warning("Fitur ini masih dalam tahap pengembangan. Hasil mungkin tidak akurat dan tidak sesuai harapan.")
+    st.warning("Fitur ini masih dalam tahap pengembangan. Hasil mungkin tidak akurat dan tidak sesuai harapan.  ")
     posisi = st.text_input("Ingin magang posisi apa?", placeholder="mis. Data Analyst, Marketing, dll")
     
     def count_keyword_matches(text, keywords):
@@ -444,7 +444,7 @@ with intern_recom:
     if posisi:
         with st.spinner("🔍 Mencari magang dengan kata kunci yang relevan..."):
             prompt_keywords = f"""
-            Kamu adalah asisten karier yang membantu dalam pencarian magang. Tugasmu adalah memberikan 5 - 10 kata kunci spesifik (dalam bahasa Indonesia) yang paling relevan untuk posisi magang dengan posisi: "{posisi}"
+            Kamu adalah asisten karier yang membantu dalam pencarian magang. Tugasmu adalah memberikan 10 - 25 kata kunci spesifik (dalam bahasa Indonesia) yang paling relevan untuk posisi magang dengan posisi: "{posisi}"
 
             Langkah-langkah:
             1. Pahami maksud dari posisi tersebut: apakah ini sebuah jabatan spesifik atau bidang umum.
