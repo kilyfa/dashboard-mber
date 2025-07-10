@@ -159,23 +159,17 @@ col4.metric("Mitra Unik", filtered["mitra"].nunique())
 
 data_tab, viz_tab, cv_tab, intern_recom = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
 
-tabs = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
+with data_tab:
+    tab_data.show(filtered)
 
-if tabs[0]:
-    with tabs[0]:
-        tab_data.show(filtered)
+with viz_tab:
+    tab_viz.show(filtered)
 
-if tabs[1]:
-    with tabs[1]:
-        tab_viz.show(filtered)
+with cv_tab:
+    tab_cv.show(filtered, api_key)
 
-if tabs[2]:
-    with tabs[2]:
-        tab_cv.show(filtered, api_key)
-
-if tabs[3]:
-    with tabs[3]:
-        tab_intern.show(filtered, api_key)
+with intern_recom:
+    tab_intern.show(filtered, api_key)
 
 
 st.caption("© 2025 Dashboard Lowongan Magang Berdampak (MBER)")
