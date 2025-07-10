@@ -157,34 +157,19 @@ col2.metric("Hasil Filter", len(filtered))
 col3.metric("Total Divisi", int(filtered["jumlah"].sum()))
 col4.metric("Mitra Unik", filtered["mitra"].nunique())
 
-tabs = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
+data_tab, viz_tab, cv_tab, intern_recom = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
 
-active_tab = None
+with data_tab:
+    tab_data.show(filtered)
 
-if tabs[0]:
-    active_tab = "data"
-if tabs[1]:
-    active_tab = "viz"
-if tabs[2]:
-    active_tab = "cv"
-if tabs[3]:
-    active_tab = "intern"
+with viz_tab:
+    tab_viz.show(filtered)
 
-if active_tab == "data":
-    with tabs[0]:
-        tab_data.show(filtered)
+with cv_tab:
+    tab_cv.show(filtered, api_key)
 
-elif active_tab == "viz":
-    with tabs[1]:
-        tab_viz.show(filtered)
-
-elif active_tab == "cv":
-    with tabs[2]:
-        tab_cv.show(filtered, api_key)
-
-elif active_tab == "intern":
-    with tabs[3]:
-        tab_intern.show(filtered, api_key)
+with intern_recom:
+    tab_intern.show(filtered, api_key)
 
 
 st.caption("© 2025 Dashboard Lowongan Magang Berdampak (MBER)")
