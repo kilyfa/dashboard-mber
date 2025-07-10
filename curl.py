@@ -2,7 +2,7 @@ import json, pathlib, re, requests
 from typing import List
 import pandas as pd
 import streamlit as st
-import tab_cv, tab_data, tab_viz, tab_intern
+from myapp import tab_cv, tab_data, tab_viz, tab_intern
 
 st.set_page_config(
     page_title="Dashboard Lowongan Magang MBKM",
