@@ -159,20 +159,22 @@ col4.metric("Mitra Unik", filtered["mitra"].nunique())
 
 data_tab, viz_tab, cv_tab, intern_recom = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
 
-if data_tab:
-    with data_tab:
+tabs = st.tabs(["📄 Data", "📈 Insights", "📝 CV Analyzer", "📊 Recomendations"])
+
+if tabs[0]:
+    with tabs[0]:
         tab_data.show(filtered)
 
-if viz_tab:
-    with viz_tab:
+if tabs[1]:
+    with tabs[1]:
         tab_viz.show(filtered)
 
-if cv_tab:
-    with cv_tab:
+if tabs[2]:
+    with tabs[2]:
         tab_cv.show(filtered, api_key)
 
-if intern_recom:
-    with intern_recom:
+if tabs[3]:
+    with tabs[3]:
         tab_intern.show(filtered, api_key)
 
 
