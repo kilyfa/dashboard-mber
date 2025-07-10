@@ -19,12 +19,14 @@ def show(filtered, api_key, model_name="deepseek/deepseek-r1-0528-qwen3-8b:free"
                 {"role": "user", "content": prompt},
             ],
         }
+        
         r = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
             json=body,
             timeout=90,
         )
+
         if r.status_code != 200:
             raise RuntimeError(r.json())
         return r.json()["choices"][0]["message"]["content"]
