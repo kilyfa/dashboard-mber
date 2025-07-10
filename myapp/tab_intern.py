@@ -10,12 +10,12 @@ def show(filtered, api_key, model_name="deepseek/deepseek-r1-0528-qwen3-8b:free"
     def count_keyword_matches(text, keywords):
         return sum(kw.lower() in text.lower() for kw in keywords)
 
-    def generate_evaluation(prompt: str, model: str, key: str) -> str:
+    def generate_evaluation_intern(prompt: str, model: str, key: str) -> str:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
         body = {
             "model": model,
             "messages": [
-                {"role": "system", "content": "You are an ATS assistant who evaluates CV fit for internship positions."},
+                {"role": "system", "content": "You are an AI assistant that helps users find relevant internship positions based on specific job roles."},
                 {"role": "user", "content": prompt},
             ],
         }
@@ -44,7 +44,7 @@ def show(filtered, api_key, model_name="deepseek/deepseek-r1-0528-qwen3-8b:free"
             **Hasilkan hanya daftar kata kunci, tanpa penjelasan tambahan.**
             """
             try:
-                keywords_resp = generate_evaluation(prompt_keywords, model_name, api_key)
+                keywords_resp = generate_evaluation_intern(prompt_keywords, model_name, api_key)
                 # Pisahkan berdasarkan koma atau baris baru, lalu bersihkan spasi
                 keywords = [k.strip() for k in re.split(r"[,\n]+", keywords_resp) if k.strip()]
             except Exception as e:
@@ -54,6 +54,7 @@ def show(filtered, api_key, model_name="deepseek/deepseek-r1-0528-qwen3-8b:free"
         if keywords:
             st.markdown(f"**Kata kunci hasil AI:** `{', '.join(keywords)}`")
 
+            st.info("🔎 Mencari lowongan magang yang relevan dengan kata kunci tersebut...")
             pattern = "|".join(map(re.escape, keywords))
             mask = (
                 filtered["deskripsi"].str.contains(pattern, case=False, na=False) |

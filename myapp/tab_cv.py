@@ -51,7 +51,7 @@ def show(filtered, api_key):
             pass
         return ""
 
-    def generate_evaluation(prompt: str, model: str, key: str) -> str:
+    def generate_evaluation_cv(prompt: str, model: str, key: str) -> str:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
         body = {
             "model": model,
@@ -108,7 +108,7 @@ def show(filtered, api_key):
 
         with st.spinner("Meminta penilaian model…"):
             try:
-                evaluation = generate_evaluation(prompt, model_name, api_key)
+                evaluation = generate_evaluation_cv(prompt, model_name, api_key)
             except Exception as e:
                 st.error(f"Error model: {e}")
                 st.stop()
